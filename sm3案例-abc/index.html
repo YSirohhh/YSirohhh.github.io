@@ -1,0 +1,253 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>sm3案例'abc' | YSir_Blog</title><meta name="author" content="YSir"><meta name="copyright" content="YSir"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="参考官方文档https:&#x2F;&#x2F;oscca.gov.cn&#x2F;sca&#x2F;xxgk&#x2F;2010-12&#x2F;17&#x2F;1002389&#x2F;files&#x2F;302a3ada057c4a73830536d03e683110.pdf SM3加密过程以abc为例子 字符串 “abc” 的ASCII码为：a &#x3D; 0x61 &#x3D; 01100001b &#x3D; 0x62 &#x3D; 01100010c &#x3D; 0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sm3案例&#39;abc&#39;">
+<meta property="og:url" content="http://example.com/sm3%E6%A1%88%E4%BE%8B-abc/index.html">
+<meta property="og:site_name" content="YSir_Blog">
+<meta property="og:description" content="参考官方文档https:&#x2F;&#x2F;oscca.gov.cn&#x2F;sca&#x2F;xxgk&#x2F;2010-12&#x2F;17&#x2F;1002389&#x2F;files&#x2F;302a3ada057c4a73830536d03e683110.pdf SM3加密过程以abc为例子 字符串 “abc” 的ASCII码为：a &#x3D; 0x61 &#x3D; 01100001b &#x3D; 0x62 &#x3D; 01100010c &#x3D; 0">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/avatar.jpg">
+<meta property="article:published_time" content="2026-01-17T14:40:14.000Z">
+<meta property="article:modified_time" content="2026-01-17T14:42:03.959Z">
+<meta property="article:author" content="YSir">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/avatar.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "sm3案例'abc'",
+  "url": "http://example.com/sm3%E6%A1%88%E4%BE%8B-abc/",
+  "image": "http://example.com/img/avatar.jpg",
+  "datePublished": "2026-01-17T14:40:14.000Z",
+  "dateModified": "2026-01-17T14:42:03.959Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "YSir",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="http://example.com/sm3%E6%A1%88%E4%BE%8B-abc/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'sm3案例\'abc\'',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">8</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/images/"><i class="fa-fw fas fa-image"></i><span> Image</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">YSir_Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">sm3案例'abc'</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/images/"><i class="fa-fw fas fa-image"></i><span> Image</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">sm3案例'abc'</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-01-17T14:40:14.000Z" title="发表于 2026-01-17 22:40:14">2026-01-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-01-17T14:42:03.959Z" title="更新于 2026-01-17 22:42:03">2026-01-17</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">684</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>参考官方文档<br><a target="_blank" rel="noopener" href="https://oscca.gov.cn/sca/xxgk/2010-12/17/1002389/files/302a3ada057c4a73830536d03e683110.pdf">https://oscca.gov.cn/sca/xxgk/2010-12/17/1002389/files/302a3ada057c4a73830536d03e683110.pdf</a></p>
+<h1 id="SM3加密过程"><a href="#SM3加密过程" class="headerlink" title="SM3加密过程"></a>SM3加密过程</h1><p>以abc为例子</p>
+<p>字符串 “abc” 的ASCII码为：<br>a &#x3D; 0x61 &#x3D; 01100001<br>b &#x3D; 0x62 &#x3D; 01100010<br>c &#x3D; 0x63 &#x3D; 01100011<br>所以，”abc” 的二进制表示为：<br>01100001 01100010 01100011<br>24位</p>
+<h2 id="消息填充"><a href="#消息填充" class="headerlink" title="消息填充"></a>消息填充</h2><ol>
+<li><p><strong>添加比特1</strong><br> <strong>当前为：</strong>  01100001 01100010 01100011 1<br> <strong>当前位数：</strong> 25 位</p>
+</li>
+<li><p><strong>补 “0”</strong> 直到长度满足 (长度 % 512) &#x3D; 448<br> <strong>当前为：</strong>  01100001 01100010 01100011 1 0…0000(448-25 &#x3D; 423个0)<br> <strong>当前位数：</strong> 448位</p>
+</li>
+<li><p><strong>添加64位的长度信息</strong><br>abc共24位，用64位标识24即0000000000000018 H<br>00000000 00000000 00000000 00000000 00000000 00000000 00000000 00011000<br><strong>当前为：</strong> 01100001 01100010 01100011 1 0…000 0…000 00011000<br><strong>当前位数：</strong> 512位</p>
+</li>
+<li><p><strong>以512位一组分组</strong><br>因为这里只有512位，所以一组即可B0</p>
+</li>
+</ol>
+<h2 id="消息扩展"><a href="#消息扩展" class="headerlink" title="消息扩展"></a>消息扩展</h2><p>扩展为（W0, W1, …, W67 和 W‘0, W’1, …, W‘63）<br>一个W占32位，共132个W</p>
+<h3 id="前16个W（W0-15）就是填充完的消息"><a href="#前16个W（W0-15）就是填充完的消息" class="headerlink" title="前16个W（W0-15）就是填充完的消息"></a>前16个W（W0-15）就是填充完的消息</h3><p>j	Wj	十六进制	说明<br>0	W0	61626380	“abc” + 1个比特1<br>1	W1	00000000	补零<br>2	W2	00000000	补零<br>3	W3	00000000	补零<br>4	W4	00000000	补零<br>5	W5	00000000	补零<br>6	W6	00000000	补零<br>7	W7	00000000	补零<br>8	W8	00000000	补零<br>9	W9	00000000	补零<br>10	W10	00000000	补零<br>11	W11	00000000	补零<br>12	W12	00000000	补零<br>13	W13	00000000	补零<br>14	W14	00000000	补零<br>15	W15	00000018	原始长度24比特</p>
+<h3 id="扩展生成-W16-到-W67"><a href="#扩展生成-W16-到-W67" class="headerlink" title="扩展生成 W16 到 W67"></a>扩展生成 W16 到 W67</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">FOR j=16 TO 67 </span><br><span class="line">    Wj ←P1(Wj−16 ⊕Wj−9 ⊕(Wj−3 ≪15))⊕(Wj−13 ≪ 7)⊕Wj−6 </span><br><span class="line">ENDFOR</span><br></pre></td></tr></table></figure>
+
+<p>其中P1具体实现为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">P1(X) = X ⊕ (X ≪ 15) ⊕ (X ≪ 23)</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="扩展生成-W’0-到-W’63"><a href="#扩展生成-W’0-到-W’63" class="headerlink" title="扩展生成 W’0 到 W’63"></a>扩展生成 W’0 到 W’63</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">FOR j=0 TO 63</span><br><span class="line">    W′j = Wj ⊕Wj+4     //Wi与Wi+4互相异或</span><br><span class="line">ENDFOR</span><br></pre></td></tr></table></figure>
+
+<p>此时</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">W0W1...W67</span><br><span class="line">61626380 00000000 00000000 00000000 00000000 00000000 00000000 00000000</span><br><span class="line">00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000018</span><br><span class="line">9092e200 00000000 000c0606 719c70ed 00000000 8001801f 939f7da9 00000000</span><br><span class="line">2c6fa1f9 adaaef14 00000000 0001801e 9a965f89 49710048 23ce86a1 b2d12f1b</span><br><span class="line">e1dae338 f8061807 055d68be 86cfd481 1f447d83 d9023dbf 185898e0 e0061807</span><br><span class="line">050df55c cde0104c a5b9c955 a7df0184 6e46cd08 e3babdf8 70caa422 0353af50</span><br><span class="line">a92dbca1 5f33cfd2 e16f6e89 f70fe941 ca5462dc 85a90152 76af6296 c922bdb2</span><br><span class="line">68378cf5 97585344 09008723 86faee74 2ab908b0 4a64bc50 864e6e08 f07e6590</span><br><span class="line">325c8f78 accb8011 e11db9dd b99c0545</span><br><span class="line"></span><br><span class="line">W′0W′1...W′63</span><br><span class="line">61626380 00000000 00000000 00000000 00000000 00000000 00000000 00000000</span><br><span class="line">00000000 00000000 00000000 00000018 9092e200 00000000 000c0606 719c70f5</span><br><span class="line">9092e200 8001801f 93937baf 719c70ed 2c6fa1f9 2dab6f0b 939f7da9 0001801e</span><br><span class="line">b6f9fe70 e4dbef5c 23ce86a1 b2d0af05 7b4cbcb1 b177184f 2693ee1f 341efb9a</span><br><span class="line">fe9e9ebb 210425b8 1d05f05e 66c9cc86 1a4988df 14e22df3 bde151b5 47d91983</span><br><span class="line">6b4b3854 2e5aadb4 d5736d77 a48caed4 c76b71a9 bc89722a 91a5caab f45c4611</span><br><span class="line">6379de7d da9ace80 97c00c1f 3e2d54f3 a263ee29 12f15216 7fafe5b5 4fd853c6</span><br><span class="line">428e8445 dd3cef14 8f4ee92b 76848be4 18e587c8 e6af3c41 6753d7d5 49e260d5</span><br></pre></td></tr></table></figure>
+
+<h2 id="压缩函数"><a href="#压缩函数" class="headerlink" title="压缩函数"></a>压缩函数</h2><p>IV &#x3D;7380166f 4914b2b9 172442d7 da8a0600 a96f30bc 163138aa e38dee4d b0fb0e4e</p>
+<p>令A,B,C,D,E,F,G,H &#x3D; IV</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">FOR j=0 TO 63</span><br><span class="line">    SS1 ← ((A ≪ 12) + E + (Tj ≪ j)) ≪ 7</span><br><span class="line">    SS2 ← SS1 ⊕ (A ≪ 12)</span><br><span class="line">    TT1 ← FFj (A, B, C) + D + SS2 + W′j</span><br><span class="line">    TT2 ← GGj (E, F, G) + H + SS1 + Wj</span><br><span class="line">    D ← C</span><br><span class="line">    C ← B ≪ 9</span><br><span class="line">    B ← A</span><br><span class="line">    A ← TT1</span><br><span class="line">    H ← G</span><br><span class="line">    G ← F ≪ 19</span><br><span class="line">    F ← E</span><br><span class="line">    E ← P0(TT2)</span><br><span class="line">ENDFOR</span><br><span class="line">V(i+1) ← ABCDEFGH ⊕ V(i)</span><br></pre></td></tr></table></figure>
+
+<p>其中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Tj =</span><br><span class="line">79cc4519 (0 ≤ j ≤ 15)</span><br><span class="line">7a879d8a (16 ≤ j ≤ 63)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">P0(X) = X ⊕ (X ≪ 9) ⊕ (X ≪ 17)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">FFj (X, Y, Z)= </span><br><span class="line">X ⊕ Y ⊕ Z (0 ≤ j ≤ 15)</span><br><span class="line">(X ∧ Y ) ∨ (X ∧ Z) ∨ (Y ∧ Z ) (16 ≤ j ≤ 63)</span><br><span class="line"></span><br><span class="line">GGj (X, Y, Z) = </span><br><span class="line">X ⊕ Y ⊕ Z (0 ≤ j ≤ 15)</span><br><span class="line">(X ∧ Y ) ∨ ( ¬X∧ Z) (16 ≤ j ≤ 63)</span><br></pre></td></tr></table></figure>
+
+<h3 id="最后结果"><a href="#最后结果" class="headerlink" title="最后结果"></a>最后结果</h3><p>经过压缩函数得到新的ABCDEFGH<br>A &#x3D; 66c7f0f4<br>B &#x3D; 62eeedd9<br>C &#x3D; d1f2d46b<br>D &#x3D; dc10e4e2<br>E &#x3D; 4167c487<br>F &#x3D; 5cf2f7a2<br>G &#x3D; 297da02b<br>H &#x3D; 8f4ba8e0</p>
+<p>即结果为 66c7f0f4 62eeedd9 d1f2d46b dc10e4e2 4167c487 5cf2f7a2 297da02b 8f4ba8e0</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">YSir</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/sm3%E6%A1%88%E4%BE%8B-abc/">http://example.com/sm3%E6%A1%88%E4%BE%8B-abc/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">YSir_Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/avatar.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/sm3%E6%A1%88%E4%BE%8B-abcd-16/" title="sm3案例'abcd'*16"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">sm3案例'abcd'*16</div></div><div class="info-2"><div class="info-item-1">SM3加密过程以abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd为例子 字符串 “abcd*16” 的ASCII码为：a &#x3D; 0x61 &#x3D; 01100001b &#x3D; 0x62 &#x3D; 01100010c &#x3D; 0x63 &#x3D; 01100011d &#x3D; 0x64 &#x3D; 01100100 所以，”abcd x 16” 的二进制表示为：01100001 01100010 01100011 01100100 (x16)32 x 16 &#x3D; 512位 消息填充 添加比特1 当前为：  01100001 01100010 01100011 01100100 (x16) 1 当前位数： 513 位   补 “0” 直到长度满足 (长度 % 512) &#x3D; 448 513%512 &#x3D; 1 当前为：  01100001 01100010 01100011 01100100 … 1 0…0000(448-1 &#x3D; 447个...</div></div></div></a><a class="pagination-related" href="/IK%E9%87%8D%E5%AE%9A%E5%90%91/" title="IK重定向"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">IK重定向</div></div><div class="info-2"><div class="info-item-1">模之屋：https://www.aplaybox.com/blender2.93：插件cats只支持到2.93UE5.2用于重定向动作，5.4有bugUE5.4用于自动贴合IKblender插件CATS：https://github.com/absolute-quantum/cats-blender-plugin导入pmx模型 前期准备blender模型单位与UE不同，直接导入UE会导致模型巨大https://blog.csdn.net/ONE_SIX_MIX/article/details/119879752 根据这个来  blender内操作 模型下好后使用cats导入blender，把blender内带的东西全删了 FixModel工具修复模型，修复一次可能不够，在姿态模式下移动骨骼看是否有bug，一般两次即可仅修复一次可能产生bug不要随意缩放模型，感觉身高不对要在导入时改好，导入后改会出bug，一个box默认2M 选择骨骼进入编辑模式 添加-&gt;单段骨骼(shift+A)将新增的骨骼Bone重命名为Root 点击Hips骨骼组 骨骼属性-&gt;关系-&gt;父级 ...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">YSir</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">8</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YSirohhh"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/YSirohhh" target="_blank" title="Github"><i class="fab fa-github" style="color: #hdhfbb;"></i></a><a class="social-icon" href="mailto:2832876089@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #000000;"></i></a><a class="social-icon" href="https://space.bilibili.com/526236892" target="_blank" title="Bilibili"><i class="fas fa-tv" style="color: #fb7299;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SM3%E5%8A%A0%E5%AF%86%E8%BF%87%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">SM3加密过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E5%A1%AB%E5%85%85"><span class="toc-number">1.1.</span> <span class="toc-text">消息填充</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E6%89%A9%E5%B1%95"><span class="toc-number">1.2.</span> <span class="toc-text">消息扩展</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D16%E4%B8%AAW%EF%BC%88W0-15%EF%BC%89%E5%B0%B1%E6%98%AF%E5%A1%AB%E5%85%85%E5%AE%8C%E7%9A%84%E6%B6%88%E6%81%AF"><span class="toc-number">1.2.1.</span> <span class="toc-text">前16个W（W0-15）就是填充完的消息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E7%94%9F%E6%88%90-W16-%E5%88%B0-W67"><span class="toc-number">1.2.2.</span> <span class="toc-text">扩展生成 W16 到 W67</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A9%E5%B1%95%E7%94%9F%E6%88%90-W%E2%80%990-%E5%88%B0-W%E2%80%9963"><span class="toc-number">1.2.3.</span> <span class="toc-text">扩展生成 W’0 到 W’63</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%8B%E7%BC%A9%E5%87%BD%E6%95%B0"><span class="toc-number">1.3.</span> <span class="toc-text">压缩函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%80%E5%90%8E%E7%BB%93%E6%9E%9C"><span class="toc-number">1.3.1.</span> <span class="toc-text">最后结果</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/sm3%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0/" title="sm3算法实现">sm3算法实现</a><time datetime="2026-01-17T14:43:48.000Z" title="发表于 2026-01-17 22:43:48">2026-01-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/sm3%E6%A1%88%E4%BE%8B-abcd-16/" title="sm3案例'abcd'*16">sm3案例'abcd'*16</a><time datetime="2026-01-17T14:42:31.000Z" title="发表于 2026-01-17 22:42:31">2026-01-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/sm3%E6%A1%88%E4%BE%8B-abc/" title="sm3案例'abc'">sm3案例'abc'</a><time datetime="2026-01-17T14:40:14.000Z" title="发表于 2026-01-17 22:40:14">2026-01-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/IK%E9%87%8D%E5%AE%9A%E5%90%91/" title="IK重定向">IK重定向</a><time datetime="2026-01-17T05:59:35.000Z" title="发表于 2026-01-17 13:59:35">2026-01-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026-1-16-%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/" title="第一篇文章">第一篇文章</a><time datetime="2026-01-16T07:34:48.000Z" title="发表于 2026-01-16 15:34:48">2026-01-16</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2019 - 2026 By YSir</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
