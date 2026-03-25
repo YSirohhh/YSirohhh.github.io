@@ -1,0 +1,253 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>YSir_Blog | YSir_Blog</title><meta name="author" content="YSir"><meta name="copyright" content="YSir"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="上一章成功实现了挥刀切换武器碰撞，这一章做出武器与敌对生物重叠返回敌对生物消息（不论玩家怪物）在武器基类中有开始重叠事件，这个世界可以返回重叠的角色类，接着考这个类判断敌我，己方什么都不做，敌方通知攻击组件处理击中这里需要用到委托函数  进入武器基类，添加碰撞开始和结束事件 WeaponCollisionBox-&gt;OnComponentBeginOverlap.AddUniqueDynami">
+<meta property="og:type" content="website">
+<meta property="og:title" content="YSir_Blog">
+<meta property="og:url" content="http://example.com/cpp%E5%8A%A8%E4%BD%9C%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/4.%E6%95%8C%E4%BA%BA%E8%AE%BE%E7%BD%AE/4.11_%E6%AD%A6%E5%99%A8%E9%87%8D%E5%8F%A0.html">
+<meta property="og:site_name" content="YSir_Blog">
+<meta property="og:description" content="上一章成功实现了挥刀切换武器碰撞，这一章做出武器与敌对生物重叠返回敌对生物消息（不论玩家怪物）在武器基类中有开始重叠事件，这个世界可以返回重叠的角色类，接着考这个类判断敌我，己方什么都不做，敌方通知攻击组件处理击中这里需要用到委托函数  进入武器基类，添加碰撞开始和结束事件 WeaponCollisionBox-&gt;OnComponentBeginOverlap.AddUniqueDynami">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/avatar.jpg">
+<meta property="article:published_time" content="2026-03-15T08:20:56.928Z">
+<meta property="article:modified_time" content="2026-03-15T08:20:56.928Z">
+<meta property="article:author" content="YSir">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/avatar.jpg"><script type="application/ld+json"></script><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="http://example.com/cpp%E5%8A%A8%E4%BD%9C%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/4.%E6%95%8C%E4%BA%BA%E8%AE%BE%E7%BD%AE/4.11_%E6%AD%A6%E5%99%A8%E9%87%8D%E5%8F%A0.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'YSir_Blog',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'page'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-image"></i><span> Image</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-home-page" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">YSir_Blog</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><span class="site-page group hide"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-image"></i><span> Image</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="page-site-info"><h1 id="site-title"></h1></div></header><main class="layout" id="content-inner"><div id="page"><div class="container" id="article-container"><p>上一章成功实现了挥刀切换武器碰撞，这一章做出武器与敌对生物重叠返回敌对生物消息（不论玩家怪物）<br>在武器基类中有开始重叠事件，这个世界可以返回重叠的角色类，接着考这个类判断敌我，己方什么都不做，敌方通知攻击组件处理击中<br><img src="/4.11_%E6%AD%A6%E5%99%A8%E9%87%8D%E5%8F%A0/2026-03-11-19-10-38.png"><br>这里需要用到委托函数</p>
+<ol>
+<li><p>进入武器基类，添加碰撞开始和结束事件<br> <code>WeaponCollisionBox-&gt;OnComponentBeginOverlap.AddUniqueDynamic()</code>中<br> <code>OnComponentBeginOverlap</code>有点类似py的委托函数，作为一个变量去获得一个自定义函数的地址以代替函数成为委托函数，委托函数有一个前提就是形参相同，我们可以看<code>OnComponentBeginOverlap</code>的定义<br> 先进入<code>OnComponentBeginOverlap</code>的委托类型<code>FComponentBeginOverlapSignature</code>类可以发现如下</p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// FComponentBeginOverlapSignature的样子，相当于定义委托</span></span><br><span class="line"><span class="built_in">DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_SixParams</span>( FComponentBeginOverlapSignature, UPrimitiveComponent, OnComponentBeginOverlap, UPrimitiveComponent*, OverlappedComponent, AActor*, OtherActor, UPrimitiveComponent*, OtherComp, int32, OtherBodyIndex, <span class="type">bool</span>, bFromSweep, <span class="type">const</span> FHitResult &amp;, SweepResult);</span><br></pre></td></tr></table></figure>
+<p> 接着定义完委托后开始定义委托变量<code>OnComponentBeginOverlap</code></p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 声明委托类型的变量</span></span><br><span class="line"><span class="built_in">UPROPERTY</span>(BlueprintAssignable, Category=<span class="string">&quot;Collision&quot;</span>)</span><br><span class="line">FComponentBeginOverlapSignature OnComponentBeginOverlap;</span><br></pre></td></tr></table></figure>
+<p> 最后用委托函数的<code>AddUniqueDynamic</code>方法来给<code>OnComponentBeginOverlap</code>赋值，所得到的值就是我们所编写的函数<code>OnCollisionBoxEndOverlap</code>，这一坨下来完完全全就在模仿C#</p>
+<p> 并且，</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">1. AddUniqueDynamic 的“寻人启事”机制</span><br><span class="line">AddUniqueDynamic 本质上是一个宏。当你写下这行代码时，虚幻引擎并没有直接拿到函数的内存地址，而是执行了以下操作：</span><br><span class="line"></span><br><span class="line">字符串化：它把你写的函数名（如 OnCollisionBoxBeginOverlap）变成了一个字符串（&quot;OnCollisionBoxBeginOverlap&quot;）。</span><br><span class="line"></span><br><span class="line">查表：当碰撞发生时，引擎会拿着这个字符串去你的类里“查表”。</span><br><span class="line"></span><br><span class="line">反射系统：这个“表”就是由 UFUNCTION() 建立的反射数据。</span><br><span class="line"></span><br><span class="line">如果不加 UFUNCTION()： 引擎的反射索引表里就没有这个函数。即使你代码里写了它，引擎在运行时拿着字符串去搜，结果只会返回：“对不起，没备案，搜不到。”</span><br><span class="line"></span><br><span class="line">2. “动态”二字的代价</span><br><span class="line">在虚幻里，委托（Delegate）分为**“静态”和“动态”**：</span><br><span class="line"></span><br><span class="line">静态委托 (AddUObject)：直接存指针，不需要 UFUNCTION()。</span><br><span class="line"></span><br><span class="line">动态委托 (AddDynamic)：为了支持序列化（比如存盘后依然记得绑定关系）和蓝图交互，它必须通过反射来工作。</span><br><span class="line"></span><br><span class="line">因为 WeaponCollisionBox-&gt;OnComponentBeginOverlap 被官方定义为 动态多播委托（为了让蓝图也能用），所以作为“听众”的你，必须遵守它的规则——也就是必须通过 UFUNCTION() 备案。</span><br></pre></td></tr></table></figure>
+<p> 所以说我们所定义的反射函数必须要加上UFUNCTION头暴露给unreal，而AddUnique()非动态则不需要，所以说白了AddUniqueDynamic和UFUNCTION绑定了</p>
+<p> <a target="_blank" rel="noopener" href="https://blog.csdn.net/zxf347085420/article/details/155273136?ops_request_misc=elastic_search_misc&request_id=c9f1abf405ccdb2aba83236da6d1e1ca&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-155273136-null-null.142%5Ev102%5Epc_search_result_base8&utm_term=%E5%A7%94%E6%89%98%E5%87%BD%E6%95%B0&spm=1018.2226.3001.4187">参考文献</a></p>
+ <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// WarriorWeaponBase.h</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 委托函数，武器碰撞箱开始重叠时调用，必须有UFUNCTION()宏</span></span><br><span class="line"><span class="built_in">UFUNCTION</span>()</span><br><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">OnCollisionBoxBeginOverlap</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    UPrimitiveComponent* OverlappedComponent, <span class="comment">// 重叠的组件，即武器碰撞箱</span></span></span></span><br><span class="line"><span class="params"><span class="function">    AActor* OtherActor, <span class="comment">// 与武器碰撞箱发生重叠的其他Actor</span></span></span></span><br><span class="line"><span class="params"><span class="function">    UPrimitiveComponent* OtherComp, <span class="comment">// 与武器碰撞箱发生重叠的其他组件</span></span></span></span><br><span class="line"><span class="params"><span class="function">    int32 OtherBodyIndex, <span class="comment">// 其他组件的物理身体索引</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">bool</span> bFromSweep, <span class="comment">// 是否是从Sweep测试触发的重叠事件</span></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> FHitResult&amp; SweepResult <span class="comment">// 包含了很多碰撞信息的结构体，只有当bFromSweep为true时才有意义</span></span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span>;</span><br><span class="line"><span class="comment">// 委托函数，武器碰撞箱结束重叠时调用</span></span><br><span class="line"><span class="built_in">UFUNCTION</span>()</span><br><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">OnCollisionBoxEndOverlap</span><span class="params">(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)</span></span>;</span><br><span class="line">------------------------------------------------------------------</span><br><span class="line"><span class="comment">// WarriorWeaponBase.cpp</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// OnComponentBeginOverlap类似C#的委托变量，需要绑定一个函数来响应事件，并且这个函数必须有UFUNCTION()宏，参数列表必须和委托变量的参数列表完全一致，AddUniqueDynamic表示绑定一个成员函数，并且同一个函数只能绑定一次，AddDynamic表示绑定一个成员函数，同一个函数可以绑定多次，AddLambda表示绑定一个匿名函数</span></span><br><span class="line">WeaponCollisionBox-&gt;OnComponentBeginOverlap.<span class="built_in">AddUniqueDynamic</span>(<span class="keyword">this</span>, &amp;ThisClass::OnCollisionBoxBeginOverlap);</span><br><span class="line">WeaponCollisionBox-&gt;OnComponentEndOverlap.<span class="built_in">AddUniqueDynamic</span>(<span class="keyword">this</span>, &amp;ThisClass::OnCollisionBoxEndOverlap);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">AWarriorWeaponBase::OnCollisionBoxBeginOverlap</span><span class="params">(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, <span class="type">bool</span> bFromSweep, <span class="type">const</span> FHitResult&amp; SweepResult)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 快速获得武器持有者的Pawn</span></span><br><span class="line">    APawn* WeaponOwingPawn = <span class="built_in">GetInstigator</span>&lt;APawn&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 按理来说武器在spawn时就给了Instigator</span></span><br><span class="line">    <span class="built_in">checkf</span>(WeaponOwingPawn, <span class="built_in">TEXT</span>(<span class="string">&quot;Forgot to assgin an instigator as the owning pawn of the weapon: %s&quot;</span>), *<span class="built_in">GetName</span>());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (APawn* HitPawn = <span class="built_in">Cast</span>&lt;APawn&gt;(OtherActor))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 防止自己攻击自己</span></span><br><span class="line">        <span class="keyword">if</span> (HitPawn != WeaponOwingPawn)</span><br><span class="line">        &#123;</span><br><span class="line">            Debug::<span class="built_in">Print</span>(<span class="built_in">GetName</span>() + <span class="built_in">TEXT</span>(<span class="string">&quot; begin overlap with &quot;</span>) + HitPawn-&gt;<span class="built_in">GetName</span>(), FColor::Green);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// <span class="doctag">TODO:</span>Implement hit check for enemy characters.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">AWarriorWeaponBase::OnCollisionBoxEndOverlap</span><span class="params">(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    APawn* WeaponOwingPawn = <span class="built_in">GetInstigator</span>&lt;APawn&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">checkf</span>(WeaponOwingPawn, <span class="built_in">TEXT</span>(<span class="string">&quot;Forgot to assgin an instigator as the owning pawn of the weapon: %s&quot;</span>), *<span class="built_in">GetName</span>());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (APawn* HitPawn = <span class="built_in">Cast</span>&lt;APawn&gt;(OtherActor))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (HitPawn != WeaponOwingPawn)</span><br><span class="line">        &#123;</span><br><span class="line">            Debug::<span class="built_in">Print</span>(<span class="built_in">GetName</span>() + <span class="built_in">TEXT</span>(<span class="string">&quot; end overlap with &quot;</span>) + HitPawn-&gt;<span class="built_in">GetName</span>(), FColor::Red);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// <span class="doctag">TODO:</span>Implement hit check for enemy characters.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>碰撞逻辑写好了，现在运行，可以发现对着怪物砍有提示，对着空气、墙壁砍没提示，证明成功了<br> <img src="/4.11_%E6%AD%A6%E5%99%A8%E9%87%8D%E5%8F%A0/2026-03-11-21-40-56.png"></p>
+</li>
+</ol>
+<p>现在我们的角色可以知道当前击打的目标是谁了，下一步只需要将目标通知给战斗组件执行攻击就好。</p>
+</div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">YSir</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YSirohhh"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/YSirohhh" target="_blank" title="Github"><i class="fab fa-github" style="color: #hdhfbb;"></i></a><a class="social-icon" href="mailto:2832876089@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #000000;"></i></a><a class="social-icon" href="https://space.bilibili.com/526236892" target="_blank" title="Bilibili"><i class="fas fa-tv" style="color: #fb7299;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/Attribute%E7%9A%84%E4%B8%80%E7%94%9F/" title="Attribute的一生">Attribute的一生</a><time datetime="2026-03-25T07:26:18.000Z" title="发表于 2026-03-25 15:26:18">2026-03-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/SenseVoice%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E6%95%99%E7%A8%8B/" title="SenseVoice本地部署教程">SenseVoice本地部署教程</a><time datetime="2026-03-22T05:59:35.000Z" title="发表于 2026-03-22 13:59:35">2026-03-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/UE%E5%A7%94%E6%89%98%E5%87%BD%E6%95%B0/" title="UE委托函数">UE委托函数</a><time datetime="2026-03-16T15:43:03.000Z" title="发表于 2026-03-16 23:43:03">2026-03-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E5%B0%BC%E5%B0%94%E6%9C%BA%E6%A2%B0%E7%BA%AA%E5%85%83%E8%A7%A3%E5%8C%85%EF%BC%8C%E5%AF%BC%E5%85%A5Blender%E3%80%81UE5%E6%95%99%E7%A8%8B/" title="尼尔机械纪元解包，导入Blender、UE5教程">尼尔机械纪元解包，导入Blender、UE5教程</a><time datetime="2026-03-01T19:22:42.000Z" title="发表于 2026-03-02 03:22:42">2026-03-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/%E8%99%9A%E5%B9%BB%E5%BC%95%E6%93%8Ebug/" title="虚幻引擎bug">虚幻引擎bug</a><time datetime="2026-01-18T06:08:49.000Z" title="发表于 2026-01-18 14:08:49">2026-01-18</time></div></div></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/03/">
+            <span class="card-archive-list-date">
+              三月 2026
+            </span>
+            <span class="card-archive-list-count">4</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/01/">
+            <span class="card-archive-list-date">
+              一月 2026
+            </span>
+            <span class="card-archive-list-count">7</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/10/">
+            <span class="card-archive-list-date">
+              十月 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">13</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">16.4k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-03-25T07:28:24.698Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By YSir</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div><div class="footer_custom_text"><a href="icp链接"><img class="icp-icon" src="img/beian.png"><span>备案号：湘公网安备43100202000452号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
